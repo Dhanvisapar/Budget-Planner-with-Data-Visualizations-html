@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Budget Planner</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 30px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Budget Planner</h1>
+
+  <input type="number" id="amount" placeholder="Enter Amount" />
+  
+  <select id="type">
+    <option value="income">Income</option>
+    <option value="expense">Expense</option>
+  </select>
+
+  <button onclick="addEntry()">Add Entry</button>
+
+  <canvas id="budgetChart"></canvas>
+</div>
+
+<script>
+  let income = 0;
+  let expense = 0;
+
+  const ctx = document.getElementById('budgetChart').getContext('2d');
+  const budgetChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Income', 'Expense'],
+      datasets: [{
+        data: [0, 0],
+        backgroundColor: ['#4CAF50', '#F44336']
+      }]
+    }
+  });
+
+  function addEntry() {
+    const amount = Number(document.getElementById('amount').value);
+    const type = document.getElementById('type').value;
+
+    if (!amount || amount <= 0) {
+      alert("Enter valid amount");
+      return;
+    }
+
+    if (type === 'income') {
+      income += amount;
+    } else {
+      expense += amount;
+    }
+
+    budgetChart.data.datasets[0].data = [income, expense];
+    budgetChart.update();
+
+    document.getElementById('amount').value = '';
+  }
+</script>
+
+</body>
+</html>
